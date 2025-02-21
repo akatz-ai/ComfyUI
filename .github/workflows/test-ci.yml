@@ -38,7 +38,7 @@ jobs:
     runs-on: ${{ matrix.runner_label }}
     steps:
       - name: Test Workflows
-        uses: comfy-org/comfy-action@feature/ci-docker
+        uses: akatz-ai/comfy-action@feature/ci-docker
         with:
           os: ${{ matrix.os }}
           python_version: ${{ matrix.python_version }}
@@ -88,7 +88,7 @@ jobs:
     runs-on: ${{ matrix.runner_label }}
     steps:
       - name: Test Workflows
-        uses: comfy-org/comfy-action@feature/ci-docker
+        uses: akatz-ai/comfy-action@feature/ci-docker
         with:
           os: ${{ matrix.os }}
           python_version: ${{ matrix.python_version }}
