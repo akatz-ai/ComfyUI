@@ -12,7 +12,6 @@ on:
       - 'output/**'
       - 'notebooks/**'
       - 'script_examples/**'
-      - '.github/**'
       - 'web/**'
   workflow_dispatch:
 
