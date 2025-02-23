@@ -15,6 +15,10 @@ on:
       - 'web/**'
   workflow_dispatch:
 
+env:
+  API_ENDPOINT: ${{ vars.TEST_API_ENDPOINT || 'https://api.comfy.org/upload-artifact' }}
+  GCS_BUCKET_NAME: ${{ vars.TEST_GCS_BUCKET_NAME || 'comfyui-test-results' }}
+
 jobs:
   test-stable:
     strategy:
@@ -39,8 +43,8 @@ jobs:
     steps:
       - name: Debug GH variables
         run: |
-          echo "MY_LOCAL_ENDPOINT is: ${{ vars.MY_LOCAL_ENDPOINT || 'UNSET' }}"
-          echo "GCS_BUCKET_NAME is: ${{ vars.GCS_BUCKET_NAME || 'UNSET' }}"
+          echo "API_ENDPOINT is: ${{ env.API_ENDPOINT || 'UNSET' }}"
+          echo "GCS_BUCKET_NAME is: ${{ env.GCS_BUCKET_NAME || 'UNSET' }}"
 
       - name: Test Workflows
         uses: akatz-ai/comfy-action@feature/ci-docker
@@ -50,8 +54,8 @@ jobs:
           torch_version: ${{ matrix.torch_version }}
           google_credentials: ${{ secrets.GCS_SERVICE_ACCOUNT_JSON }}
           comfyui_flags: ${{ matrix.flags }}
-          api_endpoint: ${{ vars.MY_LOCAL_ENDPOINT || 'https://api.comfy.org/upload-artifact' }}
-          gcs_bucket_name: ${{ vars.GCS_BUCKET_NAME || 'comfyui-test-results' }}
+          api_endpoint: ${{ env.API_ENDPOINT }}
+          gcs_bucket_name: ${{ env.GCS_BUCKET_NAME }}
 
   # test-win-nightly:
   #   strategy:
@@ -101,5 +105,5 @@ jobs:
           torch_version: ${{ matrix.torch_version }}
           google_credentials: ${{ secrets.GCS_SERVICE_ACCOUNT_JSON }}
           comfyui_flags: ${{ matrix.flags }}
-          api_endpoint: ${{ vars.MY_LOCAL_ENDPOINT || 'https://api.comfy.org/upload-artifact' }}
-          gcs_bucket_name: ${{ vars.GCS_BUCKET_NAME || 'comfyui-test-results' }}
+          api_endpoint: ${{ env.API_ENDPOINT }}
+          gcs_bucket_name: ${{ env.GCS_BUCKET_NAME }}
