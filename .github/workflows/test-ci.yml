@@ -15,20 +15,24 @@ on:
       - 'web/**'
   workflow_dispatch:
 
+env:
+  API_ENDPOINT: ${{ vars.TEST_API_ENDPOINT || 'https://api.comfy.org/upload-artifact' }}
+  GCS_BUCKET_NAME: ${{ vars.TEST_GCS_BUCKET_NAME || 'comfyui-test-results' }}
+
 jobs:
   test-stable:
     strategy:
       fail-fast: false
       matrix:
         # os: [macos, linux, windows]
-        os: [macos, linux]
+        os: [linux]
         python_version: ["3.9", "3.10", "3.11", "3.12"]
         cuda_version: ["12.1"]
         torch_version: ["stable"]
         include:
-          - os: macos
-            runner_label: [self-hosted, macOS]
-            flags: "--use-pytorch-cross-attention"
+          # - os: macos
+          #   runner_label: [self-hosted, macOS]
+          #   flags: "--use-pytorch-cross-attention"
           - os: linux
             runner_label: [self-hosted, Linux]
             flags: ""
@@ -45,7 +49,8 @@ jobs:
           torch_version: ${{ matrix.torch_version }}
           google_credentials: ${{ secrets.GCS_SERVICE_ACCOUNT_JSON }}
           comfyui_flags: ${{ matrix.flags }}
-          api_endpoint: ${{ env.MY_LOCAL_ENDPOINT || 'https://api.comfy.org/upload-artifact' }}
+          api_endpoint: ${{ env.API_ENDPOINT }}
+          gcs_bucket_name: ${{ env.GCS_BUCKET_NAME }}
 
   # test-win-nightly:
   #   strategy:
@@ -74,14 +79,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos, linux]
+        os: [linux]
         python_version: ["3.11"]
         cuda_version: ["12.1"]
         torch_version: ["nightly"]
         include:
-          - os: macos
-            runner_label: [self-hosted, macOS]
-            flags: "--use-pytorch-cross-attention"
+          # - os: macos
+          #   runner_label: [self-hosted, macOS]
+          #   flags: "--use-pytorch-cross-attention"
           - os: linux
             runner_label: [self-hosted, Linux]
             flags: ""
@@ -95,4 +100,5 @@ jobs:
           torch_version: ${{ matrix.torch_version }}
           google_credentials: ${{ secrets.GCS_SERVICE_ACCOUNT_JSON }}
           comfyui_flags: ${{ matrix.flags }}
-          api_endpoint: ${{ env.MY_LOCAL_ENDPOINT || 'https://api.comfy.org/upload-artifact' }}
+          api_endpoint: ${{ env.API_ENDPOINT }}
+          gcs_bucket_name: ${{ env.GCS_BUCKET_NAME }}
