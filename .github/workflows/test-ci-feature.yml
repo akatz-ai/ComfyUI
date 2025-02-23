@@ -37,6 +37,11 @@ jobs:
           #   flags: ""
     runs-on: ${{ matrix.runner_label }}
     steps:
+      - name: Debug GH variables
+        run: |
+          echo "MY_LOCAL_ENDPOINT is: ${{ vars.MY_LOCAL_ENDPOINT || 'UNSET' }}"
+          echo "GCS_BUCKET_NAME is: ${{ vars.GCS_BUCKET_NAME || 'UNSET' }}"
+
       - name: Test Workflows
         uses: akatz-ai/comfy-action@feature/ci-docker
         with:
